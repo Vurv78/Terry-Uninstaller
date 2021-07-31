@@ -1,0 +1,30 @@
+name: Build & Lint
+on:
+  push:
+      branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build_and_deploy:
+      runs-on: windows-latest
+
+      steps:
+        - uses: actions/checkout@v2
+          with:
+            submodules: recursive
+
+        - name: Setup Toolchain
+          uses: actions-rs/toolchain@v1
+          with:
+            toolchain: stable
+            target: x86_64-pc-windows-msvc
+
+        - name: Build
+          uses: actions-rs/cargo@v1
+          with:
+            command: build
+
+        - name: Lint
+          uses: actions-rs/cargo@v1
+          with:
+            command: clippy
